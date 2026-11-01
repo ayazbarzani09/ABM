@@ -18,11 +18,21 @@ section{padding:76px 0;border-top:1px solid var(--line)}.section-tag{color:var(-
 <body>
 <header><div class="wrap"><nav><a class="brand" href="#home">ABM</a><ul><li><a href="#home">سەرەتا</a></li><li><a href="#about">دەربارە</a></li><li><a href="#work">کارەکان</a></li><li><a href="#contact">پەیوەندی</a></li><li><a href="/admin/">ئەدمین</a></li></ul></nav></div></header>
 <main>
-<div class="hero wrap" id="home"><div><div class="eyebrow">پەڕەی فەرمی</div><h1>ABM</h1><div class="goldline"></div><p>بەخێربێیت بۆ جیهانی ABM؛ شوێنێک بۆ ناساندنی بیرۆکە، کار و هەنگاوە نوێکان.</p><a class="btn" href="#about">زیاتر بزانە</a></div></div>
-<section id="about"><div class="wrap"><div class="section-tag">01 / دەربارە</div><h2 class="section-title">دەربارەی ABM</h2><p class="about">ئەم پەڕەیە بۆ ناساندنی ABM و پیشاندانی کار و پڕۆژەکان دروست کراوە. لێرەدا دەتوانیت زانیاری و نوێکارییەکان بە شێوەیەکی ڕێکخراو ببینیت.</p></div></section>
-<section id="work"><div class="wrap"><div class="section-tag">02 / کارەکان</div><h2 class="section-title">بوارەکان و پڕۆژەکان</h2><div class="cards"><article class="card"><b>تەکنەلۆژیا</b><p>بیرۆکە و پڕۆژە نوێکانی بواری تەکنەلۆژیا.</p></article><article class="card"><b>دیزاین</b><p>دیزاین و ناوەڕۆکی جوان و تایبەت.</p></article><article class="card"><b>پەرەپێدان</b><p>هەنگاوە نوێکان بۆ فێربوون و گەشەکردن.</p></article></div></div></section>
-<section id="contact"><div class="wrap"><div class="section-tag">03 / پەیوەندی</div><h2 class="section-title">پەیوەندیمان پێوە بکە</h2><div class="contact"><div><b>پێشنیار یان پرسیارت هەیە؟</b><p style="color:#aaa397;margin:5px 0 0">لە ڕێگەی ئیمەیڵەوە پەیوەندیمان پێوە بکە.</p></div><a class="btn" href="mailto:hello@example.com">ئیمەیڵ بنێرە</a></div></div></section>
+<div class="hero wrap" id="home"><div><div class="eyebrow">پەڕەی فەرمی</div><h1 id="heroTitle">ABM</h1><div class="goldline"></div><p id="heroText">بەخێربێیت بۆ جیهانی ABM؛ شوێنێک بۆ ناساندنی بیرۆکە، کار و هەنگاوە نوێکان.</p><a class="btn" href="#about">زیاتر بزانە</a></div></div>
+<section id="about"><div class="wrap"><div class="section-tag">01 / دەربارە</div><h2 class="section-title" id="aboutTitle">دەربارەی ABM</h2><p class="about" id="aboutText">ئەم پەڕەیە بۆ ناساندنی ABM و پیشاندانی کار و پڕۆژەکان دروست کراوە. لێرەدا دەتوانیت زانیاری و نوێکارییەکان بە شێوەیەکی ڕێکخراو ببینیت.</p></div></section>
+<section id="work"><div class="wrap"><div class="section-tag">02 / کارەکان</div><h2 class="section-title" id="workTitle">بوارەکان و پڕۆژەکان</h2><div class="cards"><article class="card"><b id="card1Title">تەکنەلۆژیا</b><p id="card1Text">بیرۆکە و پڕۆژە نوێکانی بواری تەکنەلۆژیا.</p></article><article class="card"><b id="card2Title">دیزاین</b><p id="card2Text">دیزاین و ناوەڕۆکی جوان و تایبەت.</p></article><article class="card"><b id="card3Title">پەرەپێدان</b><p id="card3Text">هەنگاوە نوێکان بۆ فێربوون و گەشەکردن.</p></article></div></div></section>
+<section id="contact"><div class="wrap"><div class="section-tag">03 / پەیوەندی</div><h2 class="section-title" id="contactTitle">پەیوەندیمان پێوە بکە</h2><div class="contact"><div><b>پێشنیار یان پرسیارت هەیە؟</b><p id="contactText" style="color:#aaa397;margin:5px 0 0">لە ڕێگەی ئیمەیڵەوە پەیوەندیمان پێوە بکە.</p></div><a class="btn" id="contactEmail" href="mailto:hello@example.com">hello@example.com</a></div></div></section>
 </main>
 <footer><div class="wrap">© <span id="year"></span> ABM — هەموو مافەکان پارێزراون.</div></footer>
-<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+<script>
+document.getElementById('year').textContent=new Date().getFullYear();
+fetch('/.netlify/functions/admin?action=content').then(r=>r.ok?r.json():null).then(d=>{
+ if(!d||!d.content)return; const c=d.content;
+ const set=(id,v)=>{const e=document.getElementById(id);if(e&&typeof v==='string')e.textContent=v};
+ set('heroTitle',c.heroTitle);set('heroText',c.heroText);set('aboutTitle',c.aboutTitle);set('aboutText',c.aboutText);
+ set('workTitle',c.workTitle);set('card1Title',c.card1Title);set('card1Text',c.card1Text);set('card2Title',c.card2Title);set('card2Text',c.card2Text);set('card3Title',c.card3Title);set('card3Text',c.card3Text);
+ set('contactTitle',c.contactTitle);set('contactText',c.contactText);
+ const email=document.getElementById('contactEmail');if(email&&c.email){email.href='mailto:'+c.email;email.textContent=c.email}
+}).catch(()=>{});
+</script>
 </body></html>
