@@ -32,7 +32,7 @@ section{padding:76px 0;border-top:1px solid var(--line)}.section-tag{color:var(-
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
 fetch('/.netlify/functions/admin?action=content').then(r=>r.ok?r.json():null).then(d=>{
- if(!d||!d.content)return; const c=d.content;
+ if(!d||!d.content)return; const c=d.content; if(d.image){const hero=document.querySelector('.hero');if(hero){hero.style.backgroundImage=`linear-gradient(90deg,#050608bb,#08090c55 50%,#050608bb),linear-gradient(0deg,#08090b 0,transparent 35%),url("${d.image}")`;hero.style.backgroundSize='cover';hero.style.backgroundPosition='center';}}
  const set=(id,v)=>{const e=document.getElementById(id);if(e&&typeof v==='string')e.textContent=v};
  set('heroTitle',c.heroTitle);set('heroText',c.heroText);set('aboutTitle',c.aboutTitle);set('aboutText',c.aboutText);
  set('workTitle',c.workTitle);set('card1Title',c.card1Title);set('card1Text',c.card1Text);set('card2Title',c.card2Title);set('card2Text',c.card2Text);set('card3Title',c.card3Title);set('card3Text',c.card3Text);
