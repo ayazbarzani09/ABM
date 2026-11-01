@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090909">
+<meta name="description" content="ABM — پەڕەی فەرمی و کارەکان">
+<title>ABM | پەڕەی فەرمی</title>
+<style>
+:root{--bg:#090909;--panel:#121212;--gold:#d6b56d;--gold2:#f1d99c;--muted:#aaa397;--line:#342d20}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#332817 0,transparent 45%),var(--bg);color:#f7f3e9;font-family:Tahoma,Arial,sans-serif;line-height:1.8}a{color:inherit;text-decoration:none}.wrap{width:min(1100px,calc(100% - 40px));margin:auto}
+header{position:sticky;top:0;z-index:5;background:#090909eF;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}nav{display:flex;align-items:center;justify-content:space-between;min-height:78px;gap:20px}.brand{font-size:27px;font-weight:900;letter-spacing:4px;color:var(--gold)}nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;color:#d8d1c4;font-size:14px}nav a:hover{color:var(--gold2)}
+.hero{min-height:76vh;display:grid;place-items:center;text-align:center;padding:90px 0 70px}.eyebrow{color:var(--gold);letter-spacing:4px;font-size:13px}.hero h1{font-size:clamp(48px,10vw,100px);line-height:1.1;margin:16px 0;color:var(--gold2);letter-spacing:5px;text-shadow:0 8px 50px #b58b3a33}.hero p{color:#c5bfb2;font-size:clamp(16px,2.4vw,21px);max-width:650px;margin:18px auto 30px}.btn{display:inline-block;border:1px solid var(--gold);padding:11px 26px;border-radius:3px;color:var(--gold2);transition:.2s}.btn:hover{background:var(--gold);color:#111}
+section{padding:76px 0;border-top:1px solid var(--line)}.section-tag{color:var(--gold);font-size:12px;letter-spacing:3px}.section-title{font-size:clamp(28px,5vw,42px);margin:5px 0 22px}.about{max-width:760px;color:#c7c0b3;font-size:18px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:linear-gradient(145deg,#171510,#101010);border:1px solid var(--line);padding:28px;min-height:180px}.card b{color:var(--gold2);font-size:20px}.card p{color:var(--muted);margin-bottom:0}.contact{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;background:#14120d;padding:30px;border:1px solid var(--line)}footer{padding:28px 0;color:#8f887c;font-size:13px;text-align:center;border-top:1px solid var(--line)}.goldline{width:70px;height:2px;background:var(--gold);margin:22px auto}
+@media(max-width:700px){nav{flex-wrap:wrap;padding:14px 0}nav ul{width:100%;justify-content:space-between;gap:10px;font-size:12px}.cards{grid-template-columns:1fr}.hero{min-height:65vh}.contact{display:block}.contact .btn{margin-top:18px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav><a class="brand" href="#home">ABM</a><ul><li><a href="#home">سەرەتا</a></li><li><a href="#about">دەربارە</a></li><li><a href="#work">کارەکان</a></li><li><a href="#contact">پەیوەندی</a></li></ul></nav></div></header>
+<main>
+<div class="hero wrap" id="home"><div><div class="eyebrow">پەڕەی فەرمی</div><h1>ABM</h1><div class="goldline"></div><p>بەخێربێیت بۆ جیهانی ABM؛ شوێنێک بۆ ناساندنی بیرۆکە، کار و هەنگاوە نوێکان.</p><a class="btn" href="#about">زیاتر بزانە</a></div></div>
+<section id="about"><div class="wrap"><div class="section-tag">01 / دەربارە</div><h2 class="section-title">دەربارەی ABM</h2><p class="about">ئەم پەڕەیە بۆ ناساندنی ABM و پیشاندانی کار و پڕۆژەکان دروست کراوە. لێرەدا دەتوانیت زانیاری و نوێکارییەکان بە شێوەیەکی ڕێکخراو ببینیت.</p></div></section>
+<section id="work"><div class="wrap"><div class="section-tag">02 / کارەکان</div><h2 class="section-title">بوارەکان و پڕۆژەکان</h2><div class="cards"><article class="card"><b>تەکنەلۆژیا</b><p>بیرۆکە و پڕۆژە نوێکانی بواری تەکنەلۆژیا.</p></article><article class="card"><b>دیزاین</b><p>دیزاین و ناوەڕۆکی جوان و تایبەت.</p></article><article class="card"><b>پەرەپێدان</b><p>هەنگاوە نوێکان بۆ فێربوون و گەشەکردن.</p></article></div></div></section>
+<section id="contact"><div class="wrap"><div class="section-tag">03 / پەیوەندی</div><h2 class="section-title">پەیوەندیمان پێوە بکە</h2><div class="contact"><div><b>پێشنیار یان پرسیارت هەیە؟</b><p style="color:#aaa397;margin:5px 0 0">لە ڕێگەی ئیمەیڵەوە پەیوەندیمان پێوە بکە.</p></div><a class="btn" href="mailto:hello@example.com">ئیمەیڵ بنێرە</a></div></div></section>
+</main>
+<footer><div class="wrap">© <span id="year"></span> ABM — هەموو مافەکان پارێزراون.</div></footer>
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+</body></html>
