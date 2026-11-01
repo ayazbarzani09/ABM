@@ -55,7 +55,7 @@ export default async (request) => {
     const url = new URL(request.url);
     const action = url.searchParams.get("action") || "";
     if (request.method === "OPTIONS") return new Response(null, { status: 204 });
-    if (request.method !== "POST" && action !== "me" && action !== "list") return json({ error: "Method not allowed" }, 405);
+    if (request.method !== "POST" && !["me", "list", "content"].includes(action)) return json({ error: "Method not allowed" }, 405);
     let list = await bootstrap();
 
     if (action === "login") {
