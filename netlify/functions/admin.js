@@ -56,7 +56,7 @@ export default async (request) => {
     const action = url.searchParams.get("action") || "";
     if (request.method === "OPTIONS") return new Response(null, { status: 204 });
     if (request.method !== "POST" && !["me", "list", "content"].includes(action)) return json({ error: "Method not allowed" }, 405);
-    if (action === "content") {
+    if (action === "links") {\n      const links = (await store.get("site-links", { type: "json" })) || [];\n      return json({ links: links.slice(0, 200) });\n    }\n    if (action === "content") {
       const content = (await store.get("site-content", { type: "json" })) || defaultContent;
       const image = await store.get("hero-image", { type: "json" });
       return json({ content, image: image ? `data:${image.type};base64,${image.data}` : null });
@@ -82,7 +82,7 @@ export default async (request) => {
     }
     if (!user) return json({ error: "تکایە بچۆ ژوورەوە." }, 401);
     if (action === "me") return json({ user: { username: user.username, role: user.role } });
-    if (action === "save-image") {
+    if (action === "add-link" || action === "delete-link") {\n      const links = (await store.get("site-links", { type: "json" })) || [];\n      const body = await request.json();\n      if (action === "add-link") {\n        if (links.length >= 200) return json({ error: "تەنها ٢٠٠ لینک ڕێگەپێدراوە." }, 400);\n        const title = String(body.title || "").trim(); const urlValue = String(body.url || "").trim();\n        let parsed; try { parsed = new URL(urlValue); } catch { return json({ error: "لینکەکە دروست نییە." }, 400); }\n        if (!["http:", "https:"].includes(parsed.protocol) || !title || title.length > 120) return json({ error: "ناو یان لینکەکە دروست نییە." }, 400);\n        links.push({ title, url: parsed.href });\n      } else { const index = Number(body.index); if (!Number.isInteger(index) || index < 0 || index >= links.length) return json({ error: "لینک نەدۆزرایەوە." }, 400); links.splice(index, 1); }\n      await store.setJSON("site-links", links); return json({ ok: true, links });\n    }\n    if (action === "save-image") {
       const body = await request.json();
       const type = String(body.type || "");
       const data = String(body.data || "");
