@@ -82,7 +82,16 @@ export default async (request) => {
     }
     if (!user) return json({ error: "تکایە بچۆ ژوورەوە." }, 401);
     if (action === "me") return json({ user: { username: user.username, role: user.role } });
-    if (action === "save-image") {\n      const body = await request.json();\n      const type = String(body.type || "");\n      const data = String(body.data || "");\n      if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(type)) return json({ error: "تەنها JPG، PNG، WEBP یان GIF ڕێگەپێدراوە." }, 400);\n      if (!data || data.length > 2800000 || !/^[A-Za-z0-9+/]+=*$/.test(data)) return json({ error: "قەبارەی وێنە زۆرە یان فایلەکە دروست نییە. وێنەیەکی کەمتر لە ٢MB هەڵبژێرە." }, 400);\n      await store.setJSON("hero-image", { type, data });\n      return json({ ok: true });\n    }\n    if (action === "save-content") {
+    if (action === "save-image") {
+      const body = await request.json();
+      const type = String(body.type || "");
+      const data = String(body.data || "");
+      if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(type)) return json({ error: "تەنها JPG، PNG، WEBP یان GIF ڕێگەپێدراوە." }, 400);
+      if (!data || data.length > 2800000 || !/^[A-Za-z0-9+/]+=*$/.test(data)) return json({ error: "قەبارەی وێنە زۆرە یان فایلەکە دروست نییە. وێنەیەکی کەمتر لە ٢MB هەڵبژێرە." }, 400);
+      await store.setJSON("hero-image", { type, data });
+      return json({ ok: true });
+    }
+    if (action === "save-content") {
       const body = await request.json();
       const clean = {};
       for (const key of Object.keys(defaultContent)) {
