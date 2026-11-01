@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090909"><title>ABM | بەڕێوەبەرایەتی</title>
+<style>
+:root{--bg:#090909;--panel:#14120d;--gold:#d6b56d;--line:#342d20;--muted:#aaa397}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#332817,transparent 45%),var(--bg);color:#f7f3e9;font-family:Tahoma,Arial,sans-serif;line-height:1.8;min-height:100vh}
+main{width:min(680px,calc(100% - 32px));margin:50px auto}.brand{text-align:center;color:var(--gold);font-size:32px;font-weight:900;letter-spacing:5px}
+h1{font-size:24px;text-align:center;margin:5px 0 24px}.panel{background:var(--panel);border:1px solid var(--line);padding:24px;border-radius:10px;margin:18px 0}
+label{display:block;margin:12px 0 5px;color:#d8d1c4}input{width:100%;padding:13px;background:#090909;border:1px solid var(--line);border-radius:6px;color:white;font:inherit}
+button,.btn{font:inherit;cursor:pointer;background:var(--gold);color:#111;border:0;border-radius:6px;padding:11px 18px;font-weight:bold;margin-top:14px}
+button.secondary{background:transparent;color:var(--gold);border:1px solid var(--gold)}button.danger{background:#6e2929;color:white;margin:0;padding:6px 12px}
+small,.muted{color:var(--muted)}.error{color:#ff9d9d}.success{color:#b7e6b8}.hidden{display:none}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.admin{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+a{color:var(--gold)}.back{display:block;text-align:center;margin:24px}
+</style></head>
+<body><main>
+<div class="brand">ABM</div><h1>بەڕێوەبەرایەتی ماڵپەڕ</h1>
+<section id="login" class="panel">
+<h2>چوونە ژوورەوە</h2>
+<form id="loginForm"><label>ناوی بەکارهێنەر</label><input name="username" autocomplete="username" required><label>وشەی نهێنی</label><input name="password" type="password" autocomplete="current-password" required><button type="submit">چوونە ژوورەوە</button></form><p id="loginMsg" class="error"></p>
+</section>
+<section id="dashboard" class="hidden">
+<div class="panel top"><div>بەخێربێیت، <b id="who"></b><div class="muted" id="role"></div></div><button class="secondary" id="logout">چوونەدەرەوە</button></div>
+<div id="ownerPanel" class="panel hidden"><h2>زیادکردنی ئەدمینی نوێ</h2><form id="addForm"><label>ناوی ئەدمین (بە ئینگلیزی)</label><input name="username" minlength="3" maxlength="32" pattern="[a-zA-Z0-9_.-]+" required><label>وشەی نهێنی (لانیکەم ١٢ پیت)</label><input name="password" type="password" minlength="12" required><button type="submit">زیادکردنی ئەدمین</button></form><p id="addMsg"></p><h2>ئەدمینەکان</h2><div id="admins"></div></div>
+<div class="panel"><p>ئەم بەشە بۆ چوونەژوورەوە و بەڕێوەبردنی دەسەڵاتی ئەدمینەکانە. دەستکاریکردنی ناوەڕۆکی ماڵپەڕ لە هەنگاوی داهاتوودا زیاد دەکرێت.</p></div>
+</section><a class="back" href="/">گەڕانەوە بۆ ماڵپەڕ</a>
+<script>
+const endpoint='/.netlify/functions/admin';
+async function api(action,data){const r=await fetch(endpoint+'?action='+action,{method:action==='me'||action==='list'?'GET':'POST',headers:{'content-type':'application/json'},body:['me','list'].includes(action)?undefined:JSON.stringify(data||{})});const j=await r.json();if(!r.ok)throw new Error(j.error||'هەڵە ڕوویدا');return j}
+function msg(id,text,cls='error'){const e=document.getElementById(id);e.textContent=text;e.className=cls}
+async function load(){try{const d=await api('me');document.getElementById('login').classList.add('hidden');document.getElementById('dashboard').classList.remove('hidden');document.getElementById('who').textContent=d.user.username;document.getElementById('role').textContent=d.user.role==='owner'?'خاوەنی ماڵپەڕ':'ئەدمین';if(d.user.role==='owner'){document.getElementById('ownerPanel').classList.remove('hidden');await listAdmins()}}catch(e){}}
+async function listAdmins(){const d=await api('list');const root=document.getElementById('admins');root.innerHTML='';d.admins.forEach(a=>{const row=document.createElement('div');row.className='admin';const label=document.createElement('span');label.textContent=a.username+(a.role==='owner'?' — خاوەن':' — ئەدمین');row.append(label);if(a.role!=='owner'){const b=document.createElement('button');b.className='danger';b.textContent='سڕینەوە';b.onclick=async()=>{if(confirm('دڵنیایت لە سڕینەوەی ئەم ئەدمینە؟')){try{await api('remove',{id:a.id});await listAdmins()}catch(e){alert(e.message)}}};row.append(b)}root.append(row)})}
+document.getElementById('loginForm').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target);try{await api('login',{username:f.get('username'),password:f.get('password')});msg('loginMsg','');await load()}catch(x){msg('loginMsg',x.message)}};
+document.getElementById('addForm').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target);try{await api('add',{username:f.get('username'),password:f.get('password')});e.target.reset();msg('addMsg','ئەدمین زیاد کرا.','success');await listAdmins()}catch(x){msg('addMsg',x.message)}};
+document.getElementById('logout').onclick=async()=>{await api('logout');location.reload()};load();
+</script></main></body></html>
