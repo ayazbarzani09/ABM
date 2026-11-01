@@ -56,6 +56,11 @@ export default async (request) => {
     const action = url.searchParams.get("action") || "";
     if (request.method === "OPTIONS") return new Response(null, { status: 204 });
     if (request.method !== "POST" && !["me", "list", "content"].includes(action)) return json({ error: "Method not allowed" }, 405);
+    if (action === "content") {
+      const content = (await store.get("site-content", { type: "json" })) || defaultContent;
+      const image = await store.get("hero-image", { type: "json" });
+      return json({ content, image: image ? `data:${image.type};base64,${image.data}` : null });
+    }
     let list = await bootstrap();
 
     if (action === "login") {
@@ -77,7 +82,7 @@ export default async (request) => {
     }
     if (!user) return json({ error: "تکایە بچۆ ژوورەوە." }, 401);
     if (action === "me") return json({ user: { username: user.username, role: user.role } });
-    if (action === "save-content") {
+    if (action === "save-image") {\n      const body = await request.json();\n      const type = String(body.type || "");\n      const data = String(body.data || "");\n      if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(type)) return json({ error: "تەنها JPG، PNG، WEBP یان GIF ڕێگەپێدراوە." }, 400);\n      if (!data || data.length > 2800000 || !/^[A-Za-z0-9+/]+=*$/.test(data)) return json({ error: "قەبارەی وێنە زۆرە یان فایلەکە دروست نییە. وێنەیەکی کەمتر لە ٢MB هەڵبژێرە." }, 400);\n      await store.setJSON("hero-image", { type, data });\n      return json({ ok: true });\n    }\n    if (action === "save-content") {
       const body = await request.json();
       const clean = {};
       for (const key of Object.keys(defaultContent)) {
