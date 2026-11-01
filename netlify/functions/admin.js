@@ -30,6 +30,7 @@ function getCookie(request, name) {
 }
 async function users() { return (await store.get("users", { type: "json" })) || []; }
 async function saveUsers(value) { await store.setJSON("users", value); }
+const defaultContent = { heroTitle:"ABM", heroText:"بەخێربێیت بۆ جیهانی ABM؛ شوێنێک بۆ ناساندنی بیرۆکە، کار و هەنگاوە نوێکان.", aboutTitle:"دەربارەی ABM", aboutText:"ئەم پەڕەیە بۆ ناساندنی ABM و پیشاندانی کار و پڕۆژەکان دروست کراوە. لێرەدا دەتوانیت زانیاری و نوێکارییەکان بە شێوەیەکی ڕێکخراو ببینیت.", workTitle:"بوارەکان و پڕۆژەکان", card1Title:"تەکنەلۆژیا", card1Text:"بیرۆکە و پڕۆژە نوێکانی بواری تەکنەلۆژیا.", card2Title:"دیزاین", card2Text:"دیزاین و ناوەڕۆکی جوان و تایبەت.", card3Title:"پەرەپێدان", card3Text:"هەنگاوە نوێکان بۆ فێربوون و گەشەکردن.", contactTitle:"پەیوەندیمان پێوە بکە", contactText:"لە ڕێگەی ئیمەیڵەوە پەیوەندیمان پێوە بکە.", email:"hello@example.com" };
 async function bootstrap() {
   const list = await users();
   if (list.length) return list;
@@ -76,6 +77,18 @@ export default async (request) => {
     }
     if (!user) return json({ error: "تکایە بچۆ ژوورەوە." }, 401);
     if (action === "me") return json({ user: { username: user.username, role: user.role } });
+    if (action === "save-content") {
+      const body = await request.json();
+      const clean = {};
+      for (const key of Object.keys(defaultContent)) {
+        const value = String(body[key] ?? "").trim();
+        if (value.length > 3000) return json({ error: "دەقەکە زۆر درێژە." }, 400);
+        clean[key] = value;
+      }
+      if (clean.email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(clean.email)) return json({ error: "ئیمەیڵەکە دروست نییە." }, 400);
+      await store.setJSON("site-content", clean);
+      return json({ ok: true });
+    }
     if (action === "list") {
       if (user.role !== "owner") return json({ error: "تەنها خاوەنی ماڵپەڕ دەتوانێت ئەدمینەکان ببینێت." }, 403);
       return json({ admins: list.map(u => ({ id: u.id, username: u.username, role: u.role, createdAt: u.createdAt })) });
